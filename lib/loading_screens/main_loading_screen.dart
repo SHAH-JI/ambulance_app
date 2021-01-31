@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:ambulance_app/constants.dart';
-import 'package:ambulance_app/screens/main_screen.dart';
+import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
