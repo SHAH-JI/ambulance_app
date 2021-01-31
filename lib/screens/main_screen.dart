@@ -1,7 +1,6 @@
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainViewScreen extends StatefulWidget {
   static String id = "main_view_screen";
