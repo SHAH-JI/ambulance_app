@@ -90,7 +90,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
                             child: IconButton(
                                 icon: Icon(
                                   Icons.add_call,
-                                  size: 0.0,
+                                  size: 60.0,
                                   color: kMainThemeColor,
                                 ),
                                 onPressed: () {
