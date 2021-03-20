@@ -1,6 +1,6 @@
 import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
-import 'package:ambulance_app/screens/main_screen.dart';
+import 'package:ambulance_app/screens/main_view_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/signup_screen.dart';

@@ -1,6 +1,7 @@
+import 'package:ambulance_app/components/buttons/action_button.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CallScreen extends StatefulWidget {
   static String id = "call_screen";
@@ -14,53 +15,132 @@ class _CallScreenState extends State<CallScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Rescue 1122"),
         backgroundColor: kMainThemeColor,
+        title: Text(
+          "Rescue 1122",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Stack(
         fit: StackFit.expand,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 60.0,
-                child: CircleAvatar(
-                  radius: 50.0,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 40.0,
-                    child: Icon(
-                      Icons.add_ic_call_outlined,
-                      size: 50.0,
-                      color: Colors.white,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 35.0,
+                      child: Icon(
+                        Icons.account_circle,
+                        size: 70.0,
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ali Khan",
+                          style: TextStyle(
+                            color: kMainThemeColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "UET Mardan",
+                          style: TextStyle(
+                            color: kMainThemeColor,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  "Calling...",
-                  style: TextStyle(
-                    color: kMainThemeColor,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                "Click Here for Any Emergency",
+                style: TextStyle(color: kMainThemeColor, fontSize: 16.0),
+              ),
+              SizedBox(
+                height: 40.0,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ActionButton(
+                      textLabel: "Call",
+                      iconName: Icons.add_ic_call,
+                      func: () => launch("tel://123"),
+                    ),
+                    ActionButton(
+                      textLabel: "Direction",
+                      iconName: Icons.directions_outlined,
+                      func: () {},
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  "01:56",
-                  style: TextStyle(
-                    color: kMainThemeColor,
-                    fontSize: 20.0,
-                  ),
-                ),
+              SizedBox(
+                height: 20.0,
               ),
+              Text(
+                "Ambulance Available",
+                style: TextStyle(color: kMainThemeColor, fontSize: 16.0),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "24",
+                      style: TextStyle(
+                        color: kMainThemeColor,
+                        fontSize: 100.0,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            ".",
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 80.0,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Hours",
+                            style: TextStyle(
+                              color: kMainThemeColor,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
-          )
+          ),
         ],
       ),
     );

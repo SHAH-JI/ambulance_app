@@ -1,6 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
-import 'package:ambulance_app/screens/main_screen.dart';
+import 'package:ambulance_app/screens/main_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
