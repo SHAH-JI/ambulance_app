@@ -6,6 +6,12 @@ const kMainThemeColor = Color(0xff990012);
 
 const kMainBackgroundColor = Color(0xffFCF0F4);
 
+const kSignUpTextStyle = TextStyle(
+  color: kMainThemeColor,
+  fontSize: 22.0,
+  fontWeight: FontWeight.bold,
+);
+
 const kTextFieldDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,
