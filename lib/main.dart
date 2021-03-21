@@ -1,6 +1,7 @@
 import 'package:ambulance_app/screens/call_screen.dart';
+import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
-import 'package:ambulance_app/screens/main_view_screen.dart';
+import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/signup_screen.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         SignInScreen.id: (context) => SignInScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
-        MainViewScreen.id: (context) => MainViewScreen(),
+        UserMainScreen.id: (context) => UserMainScreen(),
+        DriverMainScreen.id: (context) => DriverMainScreen(),
         CallScreen.id: (context) => CallScreen()
       },
     );

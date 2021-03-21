@@ -1,6 +1,7 @@
 import 'package:ambulance_app/components/buttons/action_button.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallScreen extends StatefulWidget {
@@ -84,6 +85,38 @@ class _CallScreenState extends State<CallScreen> {
                       textLabel: "Call",
                       iconName: Icons.add_ic_call,
                       func: () => launch("tel://123"),
+                    ),
+                    ActionButton(
+                      textLabel: "Location",
+                      iconName: Icons.location_on,
+                      func: () async {
+                        LocationPermission permission;
+                        bool serviceEnabled =
+                            await Geolocator.isLocationServiceEnabled();
+                        if (!serviceEnabled) {
+                          print("Location are disabled.");
+                        }
+                        permission = await Geolocator.checkPermission();
+                        if (permission == LocationPermission.denied) {
+                          permission = await Geolocator.requestPermission();
+                          if (permission == LocationPermission.deniedForever) {
+                            print(
+                                'Location permissions are permanently denied, we cannot request permissions.');
+                          }
+
+                          if (permission == LocationPermission.denied) {
+                            print('Location permissions are denied');
+                          }
+                        }
+                        Position position =
+                            await Geolocator.getCurrentPosition();
+                        print(position.latitude);
+                        print(position.longitude);
+                        launch("https://www.google.com/maps/place/" +
+                            position.latitude.toString() +
+                            "+" +
+                            position.longitude.toString());
+                      },
                     ),
                     ActionButton(
                       textLabel: "Direction",

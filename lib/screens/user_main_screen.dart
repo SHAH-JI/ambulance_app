@@ -4,13 +4,13 @@ import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:flutter/material.dart';
 
-class MainViewScreen extends StatefulWidget {
-  static String id = "main_view_screen";
+class UserMainScreen extends StatefulWidget {
+  static String id = "user_main_screen";
   @override
-  _MainViewScreenState createState() => _MainViewScreenState();
+  _UserMainScreenState createState() => _UserMainScreenState();
 }
 
-class _MainViewScreenState extends State<MainViewScreen> {
+class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

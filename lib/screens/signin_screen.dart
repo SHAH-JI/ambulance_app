@@ -1,6 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
-import 'package:ambulance_app/screens/main_view_screen.dart';
+import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -83,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 icon: Text("Sign In"),
                 onPressedFunction: () {
                   if (email == "zarik" && password == "1234") {
-                    Navigator.pushNamed(context, MainViewScreen.id);
+                    Navigator.pushNamed(context, UserMainScreen.id);
                   }
                 },
                 value: true,

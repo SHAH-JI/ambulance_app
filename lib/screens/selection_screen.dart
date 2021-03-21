@@ -5,7 +5,8 @@ import 'package:ambulance_app/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'main_view_screen.dart';
+import 'driver_main_screen.dart';
+import 'user_main_screen.dart';
 
 class MainScreen extends StatefulWidget {
   static String id = "main_screen";
@@ -59,9 +60,19 @@ class _MainScreenState extends State<MainScreen> {
               height: 25.0,
             ),
             LoginButton(
-              icon: Text("Demo"),
+              icon: Text("User Demo"),
               onPressedFunction: () {
-                Navigator.pushNamed(context, MainViewScreen.id);
+                Navigator.pushNamed(context, UserMainScreen.id);
+              },
+              value: true,
+            ),
+            SizedBox(
+              height: 25.0,
+            ),
+            LoginButton(
+              icon: Text("Driver Demo"),
+              onPressedFunction: () {
+                Navigator.pushNamed(context, DriverMainScreen.id);
               },
               value: true,
             ),
