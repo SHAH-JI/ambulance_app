@@ -1,5 +1,6 @@
 import 'package:ambulance_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomListTile extends StatelessWidget {
   final IconData icon;
@@ -33,8 +34,8 @@ class CustomListTile extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         label,
-                        style:
-                            TextStyle(fontSize: 16.0, color: kMainThemeColor),
+                        style: GoogleFonts.mcLaren(
+                            fontSize: 16.0, color: kMainThemeColor),
                       ),
                     ),
                   ],

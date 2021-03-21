@@ -1,5 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
+import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
@@ -19,7 +21,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
 
   var emailTextController = TextEditingController();
@@ -106,9 +107,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       showSpinner = true;
                     });
                     try {
-                      final user = await _auth.signInWithEmailAndPassword(
-                          email: email, password: password);
+                      final user = await FirebaseAuth.instance
+                          .signInWithEmailAndPassword(
+                              email: email, password: password);
                       if (user != null) {
+                        Provider.of<UserValues>(context, listen: false)
+                            .updateUserUID(user.user.uid);
+                        Provider.of<UserValues>(context, listen: false)
+                            .updateUserEmail(email);
                         final userRole = await FirebaseFirestore.instance
                             .collection('users')
                             .where('uid', isEqualTo: user.user.uid)

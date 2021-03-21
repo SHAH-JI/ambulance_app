@@ -1,8 +1,11 @@
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
+import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class UserMainScreen extends StatefulWidget {
   static String id = "user_main_screen";
@@ -16,23 +19,24 @@ class _UserMainScreenState extends State<UserMainScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Rescue 1122"),
+        title: Text(
+          "Rescue 1122",
+          style: GoogleFonts.mcLaren(),
+        ),
         backgroundColor: kMainThemeColor,
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(
-                "Zakria Bacha",
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                ),
+              accountName: Icon(
+                Icons.account_circle_rounded,
+                color: Colors.white,
+                size: 50.0,
               ),
               accountEmail: Text(
-                "zakriabacha64@gmail.com",
-                style: TextStyle(fontSize: 17.3),
+                Provider.of<UserValues>(context, listen: false).getEmail(),
+                style: GoogleFonts.mcLaren(fontSize: 17.3),
               ),
               decoration: BoxDecoration(color: kMainThemeColor),
             ),
@@ -67,6 +71,20 @@ class _UserMainScreenState extends State<UserMainScreen> {
                   fit: BoxFit.fill,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
+                ),
+              ),
+              Material(
+                color: kMainThemeColor,
+                child: InkWell(
+                  onTap: () {},
+                  splashColor: Colors.blue,
+                  child: Center(
+                    child: Text(
+                      "All Drivers",
+                      style: GoogleFonts.mcLaren(
+                          fontSize: 30.0, color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
+import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -172,14 +173,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               'role': 'user',
                               'uid': newUser.user.uid.toString()
                             });
-                            Navigator.pushNamed(context, UserMainScreen.id);
+                            Navigator.pushNamed(context, SignInScreen.id);
                           } else {
                             FirebaseFirestore.instance.collection('users').add({
                               'email': email,
                               'role': 'driver',
                               'uid': newUser.user.uid.toString()
                             });
-                            Navigator.pushNamed(context, DriverMainScreen.id);
+                            emailTextController.clear();
+                            passwordTextController.clear();
+                            Navigator.pushNamed(context, SignInScreen.id);
                           }
                         }
                         setState(() {

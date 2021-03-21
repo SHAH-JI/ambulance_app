@@ -1,3 +1,4 @@
+import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
@@ -6,11 +7,19 @@ import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'loading_screens/main_loading_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => UserValues(),
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
