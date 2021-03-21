@@ -1,8 +1,6 @@
 import 'dart:core';
 import 'location.dart';
 
-import 'package:flutter/material.dart';
-
 class Person {
   String _uid;
   String _name;
