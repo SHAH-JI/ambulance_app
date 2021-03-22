@@ -1,3 +1,5 @@
+import 'package:ambulance_app/components/DriverTile.dart';
+import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
@@ -13,11 +15,7 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Rescue 1122"),
-        centerTitle: true,
-        backgroundColor: kMainThemeColor,
-      ),
+      appBar: CommonAppBar(),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -58,51 +56,10 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
         padding: EdgeInsets.all(20.0),
         children: List.generate(8, (index) {
           return Center(
-            child: NewWidget(),
+            child: DriverTile(
+                icon: Icons.phone_forwarded, heading: "Driver", onTap: () {}),
           );
         }),
-      ),
-    );
-  }
-}
-
-class NewWidget extends StatelessWidget {
-  const NewWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Card(
-        color: Colors.white,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
-              alignment: Alignment.topLeft,
-              child: Icon(
-                Icons.phone_forwarded,
-                size: 80.0,
-                color: kMainThemeColor,
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Driver",
-                  style: null,
-                  textAlign: TextAlign.left,
-                  maxLines: 5,
-                ),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }

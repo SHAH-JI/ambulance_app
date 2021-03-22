@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'location.dart';
 
 class Person {
@@ -7,6 +9,24 @@ class Person {
   String _contact;
   String _gender;
   Location _lastLocation;
+  int _time;
+
+  Person(String uid, String name, String contact, String gender,
+      Location location, Timestamp time) {
+    _uid = uid;
+    _name = name;
+    _contact = contact;
+    _gender = gender;
+    _lastLocation = location;
+    _time = returnMinuteDifference(time);
+  }
+
+  int returnMinuteDifference(Timestamp time) {
+    DateTime newValue = DateTime.now();
+    var oldValue = DateTime.parse(time.toDate().toString());
+    return newValue.difference(oldValue).inMinutes;
+  }
+
   void setUID(String uid) {
     _uid = uid;
   }
@@ -28,6 +48,10 @@ class Person {
     _gender = gender;
   }
 
+  void setTime(int time) {
+    _time = time;
+  }
+
   String getUID() {
     return _uid;
   }
@@ -46,5 +70,9 @@ class Person {
 
   String getGender() {
     return _gender;
+  }
+
+  int getTime() {
+    return _time;
   }
 }

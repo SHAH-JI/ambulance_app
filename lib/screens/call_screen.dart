@@ -1,7 +1,10 @@
 import 'package:ambulance_app/components/buttons/action_button.dart';
+import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/constants.dart';
+import 'package:ambulance_app/model/Person.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallScreen extends StatefulWidget {
@@ -13,17 +16,9 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> {
   @override
   Widget build(BuildContext context) {
+    final Person args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: kMainThemeColor,
-        title: Text(
-          "Rescue 1122",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: CommonAppBar(),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -48,16 +43,16 @@ class _CallScreenState extends State<CallScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Ali Khan",
-                          style: TextStyle(
+                          args.getName(),
+                          style: GoogleFonts.mcLaren(
                             color: kMainThemeColor,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          "UET Mardan",
-                          style: TextStyle(
+                          "Ambulance",
+                          style: GoogleFonts.mcLaren(
                             color: kMainThemeColor,
                             fontSize: 18.0,
                           ),
@@ -68,14 +63,15 @@ class _CallScreenState extends State<CallScreen> {
                 ),
               ),
               SizedBox(
-                height: 20.0,
+                height: 10.0,
               ),
               Text(
                 "Click Here for Any Emergency",
-                style: TextStyle(color: kMainThemeColor, fontSize: 16.0),
+                style:
+                    GoogleFonts.mcLaren(color: kMainThemeColor, fontSize: 16.0),
               ),
               SizedBox(
-                height: 40.0,
+                height: 30.0,
               ),
               Expanded(
                 child: Row(
@@ -84,54 +80,28 @@ class _CallScreenState extends State<CallScreen> {
                     ActionButton(
                       textLabel: "Call",
                       iconName: Icons.add_ic_call,
-                      func: () => launch("tel://123"),
-                    ),
-                    ActionButton(
-                      textLabel: "Location",
-                      iconName: Icons.location_on,
-                      func: () async {
-                        LocationPermission permission;
-                        bool serviceEnabled =
-                            await Geolocator.isLocationServiceEnabled();
-                        if (!serviceEnabled) {
-                          print("Location are disabled.");
-                        }
-                        permission = await Geolocator.checkPermission();
-                        if (permission == LocationPermission.denied) {
-                          permission = await Geolocator.requestPermission();
-                          if (permission == LocationPermission.deniedForever) {
-                            print(
-                                'Location permissions are permanently denied, we cannot request permissions.');
-                          }
-
-                          if (permission == LocationPermission.denied) {
-                            print('Location permissions are denied');
-                          }
-                        }
-                        Position position =
-                            await Geolocator.getCurrentPosition();
-                        print(position.latitude);
-                        print(position.longitude);
-                        launch("https://www.google.com/maps/place/" +
-                            position.latitude.toString() +
-                            "+" +
-                            position.longitude.toString());
-                      },
+                      func: () => launch("tel://" + args.getContact()),
                     ),
                     ActionButton(
                       textLabel: "Direction",
                       iconName: Icons.directions_outlined,
-                      func: () {},
+                      func: () {
+                        launch("https://www.google.com/maps/place/" +
+                            args.getLocation().getLatitude().toString() +
+                            "+" +
+                            args.getLocation().getLongitude().toString());
+                      },
                     ),
                   ],
                 ),
               ),
               SizedBox(
-                height: 20.0,
+                height: 10.0,
               ),
               Text(
                 "Ambulance Available",
-                style: TextStyle(color: kMainThemeColor, fontSize: 16.0),
+                style:
+                    GoogleFonts.mcLaren(color: kMainThemeColor, fontSize: 16.0),
               ),
               Expanded(
                 child: Row(
@@ -139,7 +109,7 @@ class _CallScreenState extends State<CallScreen> {
                   children: [
                     Text(
                       "24",
-                      style: TextStyle(
+                      style: GoogleFonts.mcLaren(
                         color: kMainThemeColor,
                         fontSize: 100.0,
                       ),
@@ -151,7 +121,7 @@ class _CallScreenState extends State<CallScreen> {
                           flex: 3,
                           child: Text(
                             ".",
-                            style: TextStyle(
+                            style: GoogleFonts.mcLaren(
                               color: Colors.green,
                               fontSize: 80.0,
                             ),
@@ -161,7 +131,7 @@ class _CallScreenState extends State<CallScreen> {
                           flex: 2,
                           child: Text(
                             "Hours",
-                            style: TextStyle(
+                            style: GoogleFonts.mcLaren(
                               color: kMainThemeColor,
                               fontSize: 20.0,
                             ),
@@ -171,7 +141,21 @@ class _CallScreenState extends State<CallScreen> {
                     )
                   ],
                 ),
-              )
+              ),
+              Material(
+                color: kMainThemeColor,
+                child: InkWell(
+                  onTap: () {},
+                  splashColor: Colors.blue,
+                  child: Center(
+                    child: Text(
+                      "Hired",
+                      style: GoogleFonts.mcLaren(
+                          fontSize: 30.0, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ],

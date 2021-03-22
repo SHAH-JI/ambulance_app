@@ -2,6 +2,7 @@ import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
+import 'package:ambulance_app/screens/list_screen.dart';
 import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:ambulance_app/screens/signin_screen.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
         ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
         UserMainScreen.id: (context) => UserMainScreen(),
         DriverMainScreen.id: (context) => DriverMainScreen(),
-        CallScreen.id: (context) => CallScreen()
+        CallScreen.id: (context) => CallScreen(),
+        ListScreen.id: (context) => ListScreen(),
       },
     );
   }

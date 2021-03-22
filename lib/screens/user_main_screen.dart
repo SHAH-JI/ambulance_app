@@ -1,7 +1,9 @@
+import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
+import 'package:ambulance_app/screens/list_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,14 +19,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Rescue 1122",
-          style: GoogleFonts.mcLaren(),
-        ),
-        backgroundColor: kMainThemeColor,
-      ),
+      appBar: CommonAppBar(),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -76,7 +71,9 @@ class _UserMainScreenState extends State<UserMainScreen> {
               Material(
                 color: kMainThemeColor,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, ListScreen.id);
+                  },
                   splashColor: Colors.blue,
                   child: Center(
                     child: Text(

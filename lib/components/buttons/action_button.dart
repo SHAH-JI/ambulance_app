@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ambulance_app/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ActionButton extends StatelessWidget {
   final String textLabel;
@@ -35,7 +36,7 @@ class ActionButton extends StatelessWidget {
           ),
           Text(
             textLabel,
-            style: TextStyle(
+            style: GoogleFonts.mcLaren(
                 color: kMainThemeColor,
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold),

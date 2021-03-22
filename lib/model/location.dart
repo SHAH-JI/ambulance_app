@@ -1,6 +1,10 @@
 class Location {
   double _latitude;
   double _longitude;
+  Location(double a, double b) {
+    _latitude = a;
+    _longitude = b;
+  }
   void setLatitude(double value) {
     _latitude = value;
   }
