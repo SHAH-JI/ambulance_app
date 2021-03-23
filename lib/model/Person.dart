@@ -9,7 +9,7 @@ class Person {
   String _contact;
   String _gender;
   Location _lastLocation;
-  int _time;
+  String _time;
 
   Person(String uid, String name, String contact, String gender,
       Location location, Timestamp time) {
@@ -21,10 +21,24 @@ class Person {
     _time = returnMinuteDifference(time);
   }
 
-  int returnMinuteDifference(Timestamp time) {
+  String returnMinuteDifference(Timestamp time) {
+    List<String> timeDuration = [
+      "seconds",
+      "minutes",
+      "hours",
+      "days",
+      "month"
+    ];
+    List<int> timeValue = [60, 60, 24, 7, 4];
     DateTime newValue = DateTime.now();
     var oldValue = DateTime.parse(time.toDate().toString());
-    return newValue.difference(oldValue).inMinutes;
+    int value = newValue.difference(oldValue).inSeconds;
+    int counter = 0;
+    while (value > timeValue[counter]) {
+      value = (value / 60).round();
+      counter += 1;
+    }
+    return value.toString() + " " + timeDuration[counter];
   }
 
   void setUID(String uid) {
@@ -48,7 +62,7 @@ class Person {
     _gender = gender;
   }
 
-  void setTime(int time) {
+  void setTime(String time) {
     _time = time;
   }
 
@@ -72,7 +86,7 @@ class Person {
     return _gender;
   }
 
-  int getTime() {
+  String getTime() {
     return _time;
   }
 }

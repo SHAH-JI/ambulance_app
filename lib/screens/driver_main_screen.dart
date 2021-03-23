@@ -1,9 +1,15 @@
 import 'package:ambulance_app/components/DriverTile.dart';
+import 'package:ambulance_app/components/UserTile.dart';
 import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
+import 'package:ambulance_app/model/RescueRide.dart';
+import 'package:ambulance_app/model/UserValues.dart';
+import 'package:ambulance_app/screens/RideCompleted.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class DriverMainScreen extends StatefulWidget {
   static String id = "driver_main_screen";
@@ -14,22 +20,21 @@ class DriverMainScreen extends StatefulWidget {
 class _DriverMainScreenState extends State<DriverMainScreen> {
   @override
   Widget build(BuildContext context) {
+    final List<RescueRide> rides = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: CommonAppBar(),
       drawer: Drawer(
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(
-                "Zakria Bacha",
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                ),
+              accountName: Icon(
+                Icons.account_circle_rounded,
+                color: Colors.white,
+                size: 50.0,
               ),
               accountEmail: Text(
-                "zakriabacha64@gmail.com",
-                style: TextStyle(fontSize: 17.3),
+                Provider.of<UserValues>(context, listen: false).getEmail(),
+                style: GoogleFonts.mcLaren(fontSize: 17.3),
               ),
               decoration: BoxDecoration(color: kMainThemeColor),
             ),
@@ -51,16 +56,27 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
           ],
         ),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.all(20.0),
-        children: List.generate(8, (index) {
-          return Center(
-            child: DriverTile(
-                icon: Icons.phone_forwarded, heading: "Driver", onTap: () {}),
-          );
-        }),
-      ),
+      body: rides.length != null
+          ? ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(20.0),
+              children: List.generate(rides.length, (index) {
+                return Center(
+                  child: UserTile(
+                      time: "12 minute",
+                      loc: rides[index].getUserLocation(),
+                      heading: "Request " + (index + 1).toString(),
+                      onTap: () {
+                        Navigator.pushNamed(context, RideCompleted.id,
+                            arguments: rides[index]);
+                      }),
+                );
+              }),
+            )
+          : Text(
+              "No Active Rides",
+              style: GoogleFonts.mcLaren(),
+            ),
     );
   }
 }

@@ -17,35 +17,9 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  List<Person> driver = [];
-  void getData() async {
-    final user = await FirebaseFirestore.instance.collection('Person').get();
-    for (var userData in user.docs) {
-      if (userData.data()['isDriver'] == true) {
-        driver.add(Person(
-            userData.data()['uid'],
-            userData.data()['name'],
-            userData.data()['contact'],
-            userData.data()['gender'],
-            Location(userData.data()['last_location'].latitude,
-                userData.data()['last_location'].longitude),
-            userData.data()['time']));
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Firebase.initializeApp().whenComplete(() {
-      setState(() {});
-    });
-    getData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    sleep(Duration(milliseconds: 800));
+    final List<Person> driver = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: CommonAppBar(),
       body: ListView(

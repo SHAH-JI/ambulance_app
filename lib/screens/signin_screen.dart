@@ -1,5 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
+import 'package:ambulance_app/model/RescueRide.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/user_main_screen.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
-
+import 'package:ambulance_app/model/location.dart';
 import '../constants.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
 
@@ -123,7 +124,31 @@ class _SignInScreenState extends State<SignInScreen> {
                           if (value.data()['role'] == 'user') {
                             Navigator.pushNamed(context, UserMainScreen.id);
                           } else {
-                            Navigator.pushNamed(context, DriverMainScreen.id);
+                            List<RescueRide> rides = [];
+                            final dataset = await FirebaseFirestore.instance
+                                .collection('RescueRides')
+                                .where('isCompleted', isEqualTo: false)
+                                .get();
+                            for (var dataValue in dataset.docs) {
+                              if (dataValue.data()['driverUID'] ==
+                                  Provider.of<UserValues>(context,
+                                          listen: false)
+                                      .getUserUID()) {
+                                rides.add(RescueRide(
+                                    dataValue.data()['userUID'],
+                                    dataValue.data()['driverUID'],
+                                    dataValue.data()['userContact'],
+                                    Location(
+                                        dataValue
+                                            .data()['userLocation']
+                                            .latitude,
+                                        dataValue
+                                            .data()['userLocation']
+                                            .longitude)));
+                              }
+                            }
+                            Navigator.pushNamed(context, DriverMainScreen.id,
+                                arguments: rides);
                           }
                         }
                       }

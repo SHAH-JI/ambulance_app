@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ambulance_app/model/location.dart';
 import '../constants.dart';
 
-class DriverTile extends StatelessWidget {
-  final IconData icon;
+class UserTile extends StatelessWidget {
   final String heading;
   final Function onTap;
+  final Location loc;
   final String time;
-  DriverTile({this.icon, this.heading, this.onTap, this.time});
+  UserTile({this.heading, this.onTap, this.time, this.loc});
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,6 @@ class DriverTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
-              alignment: Alignment.topLeft,
-              child: Icon(
-                icon,
-                size: 80.0,
-                color: kMainThemeColor,
-              ),
-            ),
             Expanded(
               child: Column(
                 children: [
@@ -51,7 +42,7 @@ class DriverTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Location Updated ",
+                    "Request Made",
                     style: GoogleFonts.mcLaren(color: kMainThemeColor),
                   ),
                   Text(

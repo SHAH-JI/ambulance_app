@@ -2,9 +2,15 @@ import 'package:ambulance_app/components/buttons/action_button.dart';
 import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/Person.dart';
+import 'package:ambulance_app/model/UserValues.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallScreen extends StatefulWidget {
@@ -14,6 +20,14 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Person args = ModalRoute.of(context).settings.arguments;
@@ -145,7 +159,32 @@ class _CallScreenState extends State<CallScreen> {
               Material(
                 color: kMainThemeColor,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    Position position = await Geolocator.getCurrentPosition();
+                    FirebaseFirestore.instance.collection('RescueRides').add({
+                      'userUID': Provider.of<UserValues>(context, listen: false)
+                          .getUserUID(),
+                      'driverUID': args.getUID(),
+                      'isCompleted': false,
+                      'userContact':
+                          Provider.of<UserValues>(context, listen: false)
+                              .getUserContact(),
+                      'userLocation':
+                          GeoPoint(position.latitude, position.longitude)
+                    });
+                    Alert(
+                      context: context,
+                      type: AlertType.success,
+                      title: "Ambulance Hired",
+                      buttons: [],
+                      style: AlertStyle(
+                        alertBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: BorderSide(color: kMainThemeColor, width: 5.0),
+                        ),
+                      ),
+                    ).show();
+                  },
                   splashColor: Colors.blue,
                   child: Center(
                     child: Text(

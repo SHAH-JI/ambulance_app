@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserValues extends ChangeNotifier {
-  String _userUID = "value";
+  String _userUID = "12";
+  String _userName = "Abu Bakar";
   String _userEmail = "@gmail.com";
+  String _userContact = "0303";
   String _lastDriverUID = "value";
   void updateUserUID(String uid) {
     _userUID = uid;
@@ -18,6 +20,23 @@ class UserValues extends ChangeNotifier {
   void updateLastDriverUID(String uid) {
     _lastDriverUID = uid;
     notifyListeners();
+  }
+
+  void updateUserContact(String contact) {
+    _userContact = contact;
+    notifyListeners();
+  }
+
+  void updateUserName(String a) {
+    _userName = a;
+  }
+
+  String getUserName() {
+    return _userName;
+  }
+
+  String getUserContact() {
+    return _userContact;
   }
 
   String getUserUID() {
