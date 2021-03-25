@@ -32,10 +32,19 @@ class _UserMainScreenState extends State<UserMainScreen> {
           child: ListView(
             children: [
               UserAccountsDrawerHeader(
-                accountName: Icon(
-                  Icons.account_circle_rounded,
-                  color: Colors.white,
-                  size: 50.0,
+                accountName: Row(
+                  children: [
+                    Icon(
+                      Icons.account_circle_rounded,
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
+                    Text(
+                      Provider.of<UserValues>(context).getUserName(),
+                      style: GoogleFonts.mcLaren(
+                          fontSize: 30.0, color: Colors.white),
+                    )
+                  ],
                 ),
                 accountEmail: Text(
                   Provider.of<UserValues>(context, listen: false).getEmail(),

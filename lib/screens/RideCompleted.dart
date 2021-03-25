@@ -31,7 +31,7 @@ class _RideCompletedState extends State<RideCompleted> {
             child: Container(
               child: Center(
                 child: Text(
-                  Provider.of<UserValues>(context, listen: false).getUserName(),
+                  ride.getUserName(),
                   style: GoogleFonts.mcLaren(
                     fontSize: 50.0,
                     fontWeight: FontWeight.bold,

@@ -162,6 +162,8 @@ class _CallScreenState extends State<CallScreen> {
                   onTap: () async {
                     Position position = await Geolocator.getCurrentPosition();
                     FirebaseFirestore.instance.collection('RescueRides').add({
+                      'name': Provider.of<UserValues>(context, listen: false)
+                          .getUserName(),
                       'userUID': Provider.of<UserValues>(context, listen: false)
                           .getUserUID(),
                       'driverUID': args.getUID(),
@@ -170,7 +172,8 @@ class _CallScreenState extends State<CallScreen> {
                           Provider.of<UserValues>(context, listen: false)
                               .getUserContact(),
                       'userLocation':
-                          GeoPoint(position.latitude, position.longitude)
+                          GeoPoint(position.latitude, position.longitude),
+                      'time': DateTime.now()
                     });
                     Alert(
                       context: context,

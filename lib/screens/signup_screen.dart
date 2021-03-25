@@ -178,6 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             FirebaseFirestore.instance.collection('users').add({
                               'email': email,
                               'role': 'driver',
+                              'isFirstLogin': true,
                               'uid': newUser.user.uid.toString()
                             });
                             emailTextController.clear();

@@ -1,16 +1,36 @@
 import 'package:ambulance_app/model/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RescueRide {
   String _userUID;
   String _driverUID;
   String _userContact;
   Location _userLocation;
-
-  RescueRide(String a, String b, String c, Location d) {
+  Timestamp _time;
+  String _userName;
+  RescueRide(String a, String b, String c, Location d, Timestamp t, String n) {
     _userUID = a;
     _driverUID = b;
     _userContact = c;
     _userLocation = d;
+    _time = t;
+    _userName = n;
+  }
+
+  void setTime(Timestamp t) {
+    _time = t;
+  }
+
+  Timestamp getTime() {
+    return _time;
+  }
+
+  void setUserName(String t) {
+    _userName = t;
+  }
+
+  String getUserName() {
+    return _userName;
   }
 
   void setUserUID(String uid) {

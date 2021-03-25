@@ -7,6 +7,7 @@ import 'package:ambulance_app/model/RescueRide.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/RideCompleted.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,26 @@ class DriverMainScreen extends StatefulWidget {
 }
 
 class _DriverMainScreenState extends State<DriverMainScreen> {
+  String returnMinuteDifference(Timestamp time) {
+    List<String> timeDuration = [
+      "seconds",
+      "minutes",
+      "hours",
+      "days",
+      "month"
+    ];
+    List<int> timeValue = [60, 60, 24, 7, 4];
+    DateTime newValue = DateTime.now();
+    var oldValue = DateTime.parse(time.toDate().toString());
+    int value = newValue.difference(oldValue).inSeconds;
+    int counter = 0;
+    while (value > timeValue[counter]) {
+      value = (value / 60).round();
+      counter += 1;
+    }
+    return value.toString() + " " + timeDuration[counter];
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<RescueRide> rides = ModalRoute.of(context).settings.arguments;
@@ -56,16 +77,16 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
           ],
         ),
       ),
-      body: rides.length != null
+      body: rides.length != 0
           ? ListView(
               shrinkWrap: true,
               padding: EdgeInsets.all(20.0),
               children: List.generate(rides.length, (index) {
                 return Center(
                   child: UserTile(
-                      time: "12 minute",
+                      time: returnMinuteDifference(rides[index].getTime()),
                       loc: rides[index].getUserLocation(),
-                      heading: "Request " + (index + 1).toString(),
+                      heading: rides[index].getUserName(),
                       onTap: () {
                         Navigator.pushNamed(context, RideCompleted.id,
                             arguments: rides[index]);

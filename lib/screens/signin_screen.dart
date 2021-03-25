@@ -3,6 +3,7 @@ import 'package:ambulance_app/components/input/login_input.dart';
 import 'package:ambulance_app/model/RescueRide.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
+import 'package:ambulance_app/screens/personnal_info_screen.dart';
 import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -121,38 +122,66 @@ class _SignInScreenState extends State<SignInScreen> {
                             .where('uid', isEqualTo: user.user.uid)
                             .get();
                         for (var value in userRole.docs) {
-                          if (value.data()['role'] == 'user') {
-                            Navigator.pushNamed(context, UserMainScreen.id);
-                          } else {
-                            List<RescueRide> rides = [];
-                            final dataset = await FirebaseFirestore.instance
-                                .collection('RescueRides')
-                                .where('isCompleted', isEqualTo: false)
-                                .get();
-                            for (var dataValue in dataset.docs) {
-                              if (dataValue.data()['driverUID'] ==
-                                  Provider.of<UserValues>(context,
-                                          listen: false)
-                                      .getUserUID()) {
-                                rides.add(RescueRide(
-                                    dataValue.data()['userUID'],
-                                    dataValue.data()['driverUID'],
-                                    dataValue.data()['userContact'],
-                                    Location(
-                                        dataValue
-                                            .data()['userLocation']
-                                            .latitude,
-                                        dataValue
-                                            .data()['userLocation']
-                                            .longitude)));
-                              }
+                          if (value.data()['isFirstLogin'] == true) {
+                            if (value.data()['role'] == 'user') {
+                              Navigator.pushNamed(
+                                  context, PersonnalInfoScreen.id,
+                                  arguments: true);
+                            } else {
+                              Navigator.pushNamed(
+                                  context, PersonnalInfoScreen.id,
+                                  arguments: false);
                             }
-                            Navigator.pushNamed(context, DriverMainScreen.id,
-                                arguments: rides);
+                          } else {
+                            final dataSet = await FirebaseFirestore.instance
+                                .collection('Preson')
+                                .where('uid', isEqualTo: user.user.uid)
+                                .get();
+                            for (var dat in dataSet.docs) {
+                              Provider.of<UserValues>(context)
+                                  .updateUserName(dat.data()['name']);
+                              Provider.of<UserValues>(context)
+                                  .updateUserEmail(dat.data()['email']);
+                              Provider.of<UserValues>(context)
+                                  .updateUserContact(dat.data()['contact']);
+                            }
+                            if (value.data()['role'] == 'user') {
+                              Navigator.pushNamed(context, UserMainScreen.id);
+                            } else {
+                              List<RescueRide> rides = [];
+                              final dataset = await FirebaseFirestore.instance
+                                  .collection('RescueRides')
+                                  .where('isCompleted', isEqualTo: false)
+                                  .get();
+                              for (var dataValue in dataset.docs) {
+                                if (dataValue.data()['driverUID'] ==
+                                    Provider.of<UserValues>(context,
+                                            listen: false)
+                                        .getUserUID()) {
+                                  rides.add(RescueRide(
+                                      dataValue.data()['userUID'],
+                                      dataValue.data()['driverUID'],
+                                      dataValue.data()['userContact'],
+                                      Location(
+                                          dataValue
+                                              .data()['userLocation']
+                                              .latitude,
+                                          dataValue
+                                              .data()['userLocation']
+                                              .longitude),
+                                      dataValue.data()['time'],
+                                      dataValue.data()['name']));
+                                }
+                              }
+                              Navigator.pushNamed(context, DriverMainScreen.id,
+                                  arguments: rides);
+                            }
                           }
                         }
                       }
-                      showSpinner = false;
+                      setState(() {
+                        showSpinner = false;
+                      });
                     } catch (e) {
                       print(e);
                     }
