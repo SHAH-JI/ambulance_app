@@ -1,7 +1,7 @@
-class Location {
+class gLocation {
   double _latitude;
   double _longitude;
-  Location(double a, double b) {
+  gLocation(double a, double b) {
     _latitude = a;
     _longitude = b;
   }

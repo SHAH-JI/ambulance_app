@@ -1,5 +1,5 @@
+import 'package:ambulance_app/model/location.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class UserValues extends ChangeNotifier {
   String _userUID = "12";

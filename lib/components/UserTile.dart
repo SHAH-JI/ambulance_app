@@ -6,7 +6,7 @@ import '../constants.dart';
 class UserTile extends StatelessWidget {
   final String heading;
   final Function onTap;
-  final Location loc;
+  final gLocation loc;
   final String time;
   UserTile({this.heading, this.onTap, this.time, this.loc});
 

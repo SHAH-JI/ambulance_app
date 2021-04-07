@@ -5,10 +5,10 @@ class RescueRide {
   String _userUID;
   String _driverUID;
   String _userContact;
-  Location _userLocation;
+  gLocation _userLocation;
   Timestamp _time;
   String _userName;
-  RescueRide(String a, String b, String c, Location d, Timestamp t, String n) {
+  RescueRide(String a, String b, String c, gLocation d, Timestamp t, String n) {
     _userUID = a;
     _driverUID = b;
     _userContact = c;
@@ -45,7 +45,7 @@ class RescueRide {
     _userContact = contact;
   }
 
-  void setUserLocation(Location loc) {
+  void setUserLocation(gLocation loc) {
     _userLocation = loc;
   }
 
@@ -61,7 +61,7 @@ class RescueRide {
     return _userContact;
   }
 
-  Location getUserLocation() {
+  gLocation getUserLocation() {
     return _userLocation;
   }
 }

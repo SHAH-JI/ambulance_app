@@ -34,7 +34,7 @@ class _PersonnalInfoScreenState extends State<PersonnalInfoScreen> {
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
       child: Scaffold(
-        appBar: CommonAppBar(),
+        appBar: commonAppBar(),
         body: Stack(
           fit: StackFit.expand,
           children: [
@@ -116,7 +116,7 @@ class _PersonnalInfoScreenState extends State<PersonnalInfoScreen> {
                               dataValue.data()['userUID'],
                               dataValue.data()['driverUID'],
                               dataValue.data()['userContact'],
-                              Location(
+                              gLocation(
                                   dataValue.data()['userLocation'].latitude,
                                   dataValue.data()['userLocation'].longitude),
                               dataValue.data()['time'],

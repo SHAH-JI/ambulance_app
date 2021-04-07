@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
@@ -8,10 +11,13 @@ import 'package:ambulance_app/screens/list_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:ambulance_app/model/location.dart';
+import 'package:location/location.dart';
 
 class UserMainScreen extends StatefulWidget {
   static String id = "user_main_screen";
@@ -22,12 +28,55 @@ class UserMainScreen extends StatefulWidget {
 class _UserMainScreenState extends State<UserMainScreen> {
   bool showSpinner = false;
 
+  StreamSubscription _locationSubscription;
+  Location _locationTracker = Location();
+  Marker marker;
+  Circle circle;
+  GoogleMapController _controller;
+
+  CameraPosition initialLocation(Position position) {
+    updateMarkerAndCircle(position);
+    return CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 17.5,
+    );
+  }
+
+  void updateMarkerAndCircle(Position position) {
+    LatLng latlng = LatLng(position.latitude, position.longitude);
+    this.setState(() {
+      marker = Marker(
+          markerId: MarkerId("user"),
+          position: latlng,
+          rotation: position.heading,
+          draggable: false,
+          zIndex: 2,
+          flat: true,
+          anchor: Offset(0.5, 0.9),
+          icon: BitmapDescriptor.defaultMarkerWithHue(1.0));
+      print(position.accuracy);
+      circle = Circle(
+          circleId: CircleId("car"),
+          radius: position.accuracy,
+          zIndex: 1,
+          strokeColor: Colors.lightBlueAccent,
+          center: latlng,
+          fillColor: Colors.lightBlueAccent.withAlpha(80));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Position userPosition = ModalRoute.of(context).settings.arguments;
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
       child: Scaffold(
-        appBar: CommonAppBar(),
+        appBar: commonAppBar(),
         drawer: Drawer(
           child: ListView(
             children: [
@@ -79,11 +128,14 @@ class _UserMainScreenState extends State<UserMainScreen> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Image(
-                    image: AssetImage('images/map.jpg'),
-                    fit: BoxFit.fill,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition: initialLocation(userPosition),
+                    markers: Set.of((marker != null) ? [marker] : []),
+                    circles: Set.of((circle != null) ? [circle] : []),
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller = controller;
+                    },
                   ),
                 ),
                 Material(
@@ -104,7 +156,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
                               userData.data()['name'],
                               userData.data()['contact'],
                               userData.data()['gender'],
-                              Location(
+                              gLocation(
                                   userData.data()['last_location'].latitude,
                                   userData.data()['last_location'].longitude),
                               userData.data()['time']));
@@ -125,19 +177,6 @@ class _UserMainScreenState extends State<UserMainScreen> {
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.location_on),
-                  iconSize: 60.0,
-                  onPressed: () {
-                    Navigator.pushNamed(context, CallScreen.id);
-                  },
-                  color: kMainThemeColor,
                 ),
               ],
             ),

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../constants.dart';
 
-AppBar CommonAppBar() {
+AppBar commonAppBar() {
   return AppBar(
     centerTitle: true,
     title: Text(

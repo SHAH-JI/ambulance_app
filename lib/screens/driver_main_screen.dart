@@ -1,4 +1,3 @@
-import 'package:ambulance_app/components/DriverTile.dart';
 import 'package:ambulance_app/components/UserTile.dart';
 import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
@@ -43,7 +42,7 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
   Widget build(BuildContext context) {
     final List<RescueRide> rides = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: CommonAppBar(),
+      appBar: commonAppBar(),
       drawer: Drawer(
         child: ListView(
           children: [

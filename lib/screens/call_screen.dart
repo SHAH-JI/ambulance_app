@@ -6,7 +6,6 @@ import 'package:ambulance_app/model/UserValues.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +31,7 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     final Person args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: CommonAppBar(),
+      appBar: commonAppBar(),
       body: Stack(
         fit: StackFit.expand,
         children: [

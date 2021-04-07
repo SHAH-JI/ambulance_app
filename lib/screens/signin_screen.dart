@@ -10,9 +10,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:ambulance_app/model/location.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
 
@@ -109,6 +111,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       showSpinner = true;
                     });
                     try {
+                      Position position = await Geolocator.getCurrentPosition(
+                          desiredAccuracy: LocationAccuracy.bestForNavigation);
                       final user = await FirebaseAuth.instance
                           .signInWithEmailAndPassword(
                               email: email, password: password);
@@ -146,7 +150,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   .updateUserContact(dat.data()['contact']);
                             }
                             if (value.data()['role'] == 'user') {
-                              Navigator.pushNamed(context, UserMainScreen.id);
+                              Navigator.pushNamed(context, UserMainScreen.id,
+                                  arguments: position);
                             } else {
                               List<RescueRide> rides = [];
                               final dataset = await FirebaseFirestore.instance
@@ -162,7 +167,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       dataValue.data()['userUID'],
                                       dataValue.data()['driverUID'],
                                       dataValue.data()['userContact'],
-                                      Location(
+                                      gLocation(
                                           dataValue
                                               .data()['userLocation']
                                               .latitude,
@@ -178,6 +183,20 @@ class _SignInScreenState extends State<SignInScreen> {
                             }
                           }
                         }
+                      } else {
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Wrong Password",
+                          buttons: [],
+                          style: AlertStyle(
+                            alertBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(
+                                  color: kMainThemeColor, width: 5.0),
+                            ),
+                          ),
+                        ).show();
                       }
                       setState(() {
                         showSpinner = false;

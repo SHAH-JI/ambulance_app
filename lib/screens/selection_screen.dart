@@ -1,18 +1,11 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/constants.dart';
-import 'package:ambulance_app/model/RescueRide.dart';
-import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/signup_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:provider/provider.dart';
-import 'package:ambulance_app/model/location.dart';
-import 'driver_main_screen.dart';
-import 'user_main_screen.dart';
 
 class MainScreen extends StatefulWidget {
   static String id = "main_screen";

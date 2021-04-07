@@ -8,11 +8,11 @@ class Person {
   String _name;
   String _contact;
   String _gender;
-  Location _lastLocation;
+  gLocation _lastLocation;
   String _time;
 
   Person(String uid, String name, String contact, String gender,
-      Location location, Timestamp time) {
+      gLocation location, Timestamp time) {
     _uid = uid;
     _name = name;
     _contact = contact;
@@ -49,7 +49,7 @@ class Person {
     _contact = contact;
   }
 
-  void setLocation(Location loc) {
+  void setLocation(gLocation loc) {
     _lastLocation.setLatitude(loc.getLatitude());
     _lastLocation.setLongitude(loc.getLongitude());
   }
@@ -70,7 +70,7 @@ class Person {
     return _uid;
   }
 
-  Location getLocation() {
+  gLocation getLocation() {
     return _lastLocation;
   }
 

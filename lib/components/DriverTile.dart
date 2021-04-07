@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ambulance_app/model/location.dart';
 import '../constants.dart';
 
 class DriverTile extends StatelessWidget {

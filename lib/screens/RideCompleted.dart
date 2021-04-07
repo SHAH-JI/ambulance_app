@@ -1,12 +1,9 @@
 import 'package:ambulance_app/components/buttons/action_button.dart';
 import 'package:ambulance_app/components/common_app_bar.dart';
-import 'package:ambulance_app/model/UserValues.dart';
+import 'package:ambulance_app/model/RescueRide.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ambulance_app/model/RescueRide.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +20,7 @@ class _RideCompletedState extends State<RideCompleted> {
   Widget build(BuildContext context) {
     final RescueRide ride = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: CommonAppBar(),
+      appBar: commonAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
