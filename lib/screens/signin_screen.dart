@@ -1,5 +1,6 @@
 import 'package:ambulance_app/components/buttons/login_button.dart';
 import 'package:ambulance_app/components/input/login_input.dart';
+import 'package:ambulance_app/model/Person.dart';
 import 'package:ambulance_app/model/RescueRide.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
@@ -113,6 +114,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     try {
                       Position position = await Geolocator.getCurrentPosition(
                           desiredAccuracy: LocationAccuracy.bestForNavigation);
+                      Provider.of<UserValues>(context, listen: false)
+                          .updateLocation(position);
                       final user = await FirebaseAuth.instance
                           .signInWithEmailAndPassword(
                               email: email, password: password);
@@ -142,16 +145,16 @@ class _SignInScreenState extends State<SignInScreen> {
                                 .where('uid', isEqualTo: user.user.uid)
                                 .get();
                             for (var dat in dataSet.docs) {
-                              Provider.of<UserValues>(context)
+                              Provider.of<UserValues>(context, listen: false)
                                   .updateUserName(dat.data()['name']);
-                              Provider.of<UserValues>(context)
+                              Provider.of<UserValues>(context, listen: false)
                                   .updateUserEmail(dat.data()['email']);
-                              Provider.of<UserValues>(context)
+                              Provider.of<UserValues>(context, listen: false)
                                   .updateUserContact(dat.data()['contact']);
                             }
                             if (value.data()['role'] == 'user') {
                               Navigator.pushNamed(context, UserMainScreen.id,
-                                  arguments: position);
+                                  arguments: Person.simplePlayer());
                             } else {
                               List<RescueRide> rides = [];
                               final dataset = await FirebaseFirestore.instance

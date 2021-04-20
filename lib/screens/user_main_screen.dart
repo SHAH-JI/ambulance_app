@@ -1,23 +1,20 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/Person.dart';
 import 'package:ambulance_app/model/UserValues.dart';
-import 'package:ambulance_app/screens/call_screen.dart';
+import 'package:ambulance_app/model/assistantMethods.dart';
 import 'package:ambulance_app/screens/list_screen.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:ambulance_app/model/location.dart';
-import 'package:location/location.dart';
 
 class UserMainScreen extends StatefulWidget {
   static String id = "user_main_screen";
@@ -28,51 +25,120 @@ class UserMainScreen extends StatefulWidget {
 class _UserMainScreenState extends State<UserMainScreen> {
   bool showSpinner = false;
 
-  StreamSubscription _locationSubscription;
-  Location _locationTracker = Location();
-  Marker marker;
-  Circle circle;
+  List<LatLng> pLineCoordinates = [];
+  Set<Polyline> pLineSet = {};
+
+  var showData;
+
   GoogleMapController _controller;
 
+  Set<Marker> markerSet = {};
+  Set<Circle> circleSet = {};
+  Circle circle;
+  String address;
   CameraPosition initialLocation(Position position) {
-    updateMarkerAndCircle(position);
     return CameraPosition(
       target: LatLng(position.latitude, position.longitude),
-      zoom: 17.5,
+      zoom: 14.2,
     );
   }
 
-  void updateMarkerAndCircle(Position position) {
-    LatLng latlng = LatLng(position.latitude, position.longitude);
-    this.setState(() {
-      marker = Marker(
-          markerId: MarkerId("user"),
-          position: latlng,
-          rotation: position.heading,
-          draggable: false,
-          zIndex: 2,
-          flat: true,
-          anchor: Offset(0.5, 0.9),
-          icon: BitmapDescriptor.defaultMarkerWithHue(1.0));
-      print(position.accuracy);
-      circle = Circle(
-          circleId: CircleId("car"),
-          radius: position.accuracy,
-          zIndex: 1,
-          strokeColor: Colors.lightBlueAccent,
-          center: latlng,
-          fillColor: Colors.lightBlueAccent.withAlpha(80));
+  Future<void> getPlaceDirection(Position pos) async {
+    var initialPos =
+        Provider.of<UserValues>(context, listen: false).getPosition();
+    var finalPos = pos;
+
+    var pickUpLatLng = LatLng(initialPos.latitude, initialPos.longitude);
+    var driveLatLng = LatLng(finalPos.latitude, finalPos.longitude);
+
+    var details = await AssistantMehthods.obtainPlaceDirectionDetails(
+        pickUpLatLng, driveLatLng);
+    print("This is Encoded Points :: ");
+    print(details.encodedPoints);
+    print(details.durationText);
+    print(details.distanceText);
+    PolylinePoints polylinePoints = PolylinePoints();
+    List<PointLatLng> decodedPolyLinePointsResult =
+        polylinePoints.decodePolyline(details.encodedPoints);
+    pLineCoordinates.clear();
+    if (decodedPolyLinePointsResult.isNotEmpty) {
+      decodedPolyLinePointsResult.forEach((PointLatLng pointLatLng) {
+        pLineCoordinates
+            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      });
+    }
+    pLineSet.clear();
+    setState(() {
+      showData = details;
+      Polyline polyline = Polyline(
+          color: kMainThemeColor,
+          polylineId: PolylineId("PolylineID"),
+          jointType: JointType.round,
+          points: pLineCoordinates,
+          width: 5,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          geodesic: true);
+      pLineSet.add(polyline);
+    });
+    LatLngBounds latLngBounds;
+    if (pickUpLatLng.latitude > driveLatLng.latitude &&
+        pickUpLatLng.longitude > driveLatLng.longitude) {
+      latLngBounds =
+          LatLngBounds(southwest: driveLatLng, northeast: driveLatLng);
+    } else if (pickUpLatLng.longitude > driveLatLng.longitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(pickUpLatLng.latitude, driveLatLng.longitude),
+          northeast: LatLng(driveLatLng.latitude, pickUpLatLng.longitude));
+    } else if (pickUpLatLng.latitude > driveLatLng.latitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(driveLatLng.latitude, pickUpLatLng.longitude),
+          northeast: LatLng(pickUpLatLng.latitude, driveLatLng.longitude));
+    } else {
+      latLngBounds =
+          LatLngBounds(southwest: pickUpLatLng, northeast: driveLatLng);
+    }
+    _controller.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+
+    Marker pickUpLocationMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      infoWindow: InfoWindow(title: "Start", snippet: "My Location"),
+      position: pickUpLatLng,
+      markerId: MarkerId("PickUpID"),
+    );
+    Marker dropOffLocationMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+      infoWindow: InfoWindow(title: "Drop", snippet: "Destination"),
+      position: driveLatLng,
+      markerId: MarkerId("DropOffID"),
+    );
+    Circle pickUpCircle = Circle(
+      fillColor: Colors.yellow,
+      center: pickUpLatLng,
+      radius: 12,
+      strokeWidth: 4,
+      strokeColor: Colors.yellowAccent,
+      circleId: CircleId("PickUp"),
+    );
+    Circle dropOffCircle = Circle(
+      fillColor: Colors.deepPurple,
+      center: pickUpLatLng,
+      radius: 12,
+      strokeWidth: 4,
+      strokeColor: Colors.deepPurpleAccent,
+      circleId: CircleId("Destination"),
+    );
+    setState(() {
+      markerSet.add(pickUpLocationMarker);
+      markerSet.add(dropOffLocationMarker);
+      circleSet.add(pickUpCircle);
+      circleSet.add(dropOffCircle);
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final Position userPosition = ModalRoute.of(context).settings.arguments;
+    final Person args = ModalRoute.of(context).settings.arguments;
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
       child: Scaffold(
@@ -130,11 +196,29 @@ class _UserMainScreenState extends State<UserMainScreen> {
                   flex: 1,
                   child: GoogleMap(
                     mapType: MapType.normal,
-                    initialCameraPosition: initialLocation(userPosition),
-                    markers: Set.of((marker != null) ? [marker] : []),
-                    circles: Set.of((circle != null) ? [circle] : []),
+                    initialCameraPosition: initialLocation(
+                        Provider.of<UserValues>(context, listen: false)
+                            .getPosition()),
+                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: true,
+                    zoomGesturesEnabled: true,
+                    compassEnabled: true,
+                    markers: markerSet,
+                    circles: circleSet,
+                    polylines: pLineSet,
                     onMapCreated: (GoogleMapController controller) {
                       _controller = controller;
+                      if (args.isHired()) {
+                        Position pos = Position(
+                            latitude: args.getLocation().getLatitude(),
+                            longitude: args.getLocation().getLongitude());
+                        getPlaceDirection(pos);
+                        print("\n\n\n");
+                        print(args.getLocation().getLatitude());
+                        print(args.getLocation().getLongitude());
+                        print("\n\n\n");
+                      }
                     },
                   ),
                 ),
@@ -180,6 +264,25 @@ class _UserMainScreenState extends State<UserMainScreen> {
                 ),
               ],
             ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 100.0),
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         "Distance : " + showData.distanceText.toString(),
+            //         style: GoogleFonts.mcLaren(
+            //             color: kMainThemeColor, fontWeight: FontWeight.bold),
+            //       ),
+            //       Text(
+            //         "Duration : " + showData.durationText.toString(),
+            //         style: GoogleFonts.mcLaren(
+            //             color: kMainThemeColor, fontWeight: FontWeight.bold),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

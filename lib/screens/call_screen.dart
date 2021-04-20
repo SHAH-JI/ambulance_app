@@ -3,6 +3,7 @@ import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/Person.dart';
 import 'package:ambulance_app/model/UserValues.dart';
+import 'package:ambulance_app/screens/user_main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -160,6 +161,10 @@ class _CallScreenState extends State<CallScreen> {
                 child: InkWell(
                   onTap: () async {
                     Position position = await Geolocator.getCurrentPosition();
+                    print(args.getLocation());
+                    print(position);
+                    print("\n\n\n");
+
                     FirebaseFirestore.instance.collection('RescueRides').add({
                       'name': Provider.of<UserValues>(context, listen: false)
                           .getUserName(),
@@ -186,6 +191,12 @@ class _CallScreenState extends State<CallScreen> {
                         ),
                       ),
                     ).show();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    args.setHired(true);
+                    Navigator.popAndPushNamed(context, UserMainScreen.id,
+                        arguments: args);
                   },
                   splashColor: Colors.blue,
                   child: Center(

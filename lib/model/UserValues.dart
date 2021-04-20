@@ -1,5 +1,5 @@
-import 'package:ambulance_app/model/location.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class UserValues extends ChangeNotifier {
   String _userUID = "12";
@@ -7,9 +7,14 @@ class UserValues extends ChangeNotifier {
   String _userEmail = "@gmail.com";
   String _userContact = "0303";
   String _lastDriverUID = "value";
+  Position _position;
   void updateUserUID(String uid) {
     _userUID = uid;
     notifyListeners();
+  }
+
+  void updateLocation(Position pos) {
+    _position = pos;
   }
 
   void updateUserEmail(String value) {
@@ -29,6 +34,10 @@ class UserValues extends ChangeNotifier {
 
   void updateUserName(String a) {
     _userName = a;
+  }
+
+  Position getPosition() {
+    return _position;
   }
 
   String getUserName() {

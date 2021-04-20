@@ -10,17 +10,30 @@ class Person {
   String _gender;
   gLocation _lastLocation;
   String _time;
+  bool _isHired;
+
+  void setHired(bool a) {
+    _isHired = a;
+  }
+
+  bool isHired() {
+    return _isHired;
+  }
 
   Person(String uid, String name, String contact, String gender,
-      gLocation location, Timestamp time) {
+      gLocation location, Timestamp time,
+      {bool a = false}) {
     _uid = uid;
     _name = name;
     _contact = contact;
     _gender = gender;
     _lastLocation = location;
     _time = returnMinuteDifference(time);
+    _isHired = a;
   }
-
+  Person.simplePlayer() {
+    _isHired = false;
+  }
   String returnMinuteDifference(Timestamp time) {
     List<String> timeDuration = [
       "seconds",

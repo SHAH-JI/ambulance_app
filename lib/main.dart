@@ -1,6 +1,7 @@
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/RideCompleted.dart';
 import 'package:ambulance_app/screens/call_screen.dart';
+import 'package:ambulance_app/screens/direction_screen.dart';
 import 'package:ambulance_app/screens/driver_main_screen.dart';
 import 'package:ambulance_app/screens/forgot_password_screen.dart';
 import 'package:ambulance_app/screens/list_screen.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ListScreen.id: (context) => ListScreen(),
         RideCompleted.id: (context) => RideCompleted(),
         PersonnalInfoScreen.id: (context) => PersonnalInfoScreen(),
+        DirectionScreen.id: (context) => DirectionScreen(),
       },
     );
   }
