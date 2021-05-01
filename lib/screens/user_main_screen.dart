@@ -264,25 +264,29 @@ class _UserMainScreenState extends State<UserMainScreen> {
                 ),
               ],
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 100.0),
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         "Distance : " + showData.distanceText.toString(),
-            //         style: GoogleFonts.mcLaren(
-            //             color: kMainThemeColor, fontWeight: FontWeight.bold),
-            //       ),
-            //       Text(
-            //         "Duration : " + showData.durationText.toString(),
-            //         style: GoogleFonts.mcLaren(
-            //             color: kMainThemeColor, fontWeight: FontWeight.bold),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    showData == null
+                        ? " "
+                        : "Distance : " + showData.distanceText.toString(),
+                    style: GoogleFonts.mcLaren(
+                        color: kMainThemeColor, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    showData == null
+                        ? " "
+                        : "Duration : " + showData.durationText.toString(),
+                    style: GoogleFonts.mcLaren(
+                        color: kMainThemeColor, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
