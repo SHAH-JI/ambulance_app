@@ -12,10 +12,15 @@ import 'package:ambulance_app/screens/signin_screen.dart';
 import 'package:ambulance_app/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'loading_screens/main_loading_screen.dart';
+import 'model/SharedPrefs.dart';
 
-void main() {
+Future<void> main() async {
+  //A function called to initialize
+  WidgetsFlutterBinding.ensureInitialized();
+  //init function is called in order to initialized the share preference of the app
+  await SharedPrefs.init();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(

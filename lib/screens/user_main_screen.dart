@@ -2,6 +2,7 @@ import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/Person.dart';
+import 'package:ambulance_app/model/SharedPrefs.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/model/assistantMethods.dart';
 import 'package:ambulance_app/screens/list_screen.dart';
@@ -162,7 +163,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
                   ],
                 ),
                 accountEmail: Text(
-                  Provider.of<UserValues>(context, listen: false).getEmail(),
+                  SharedPrefs.prefs.getString("lastUsedEmail"),
                   style: GoogleFonts.mcLaren(fontSize: 17.3),
                 ),
                 decoration: BoxDecoration(color: kMainThemeColor),

@@ -3,6 +3,7 @@ import 'package:ambulance_app/components/common_app_bar.dart';
 import 'package:ambulance_app/components/custom_list_tile.dart';
 import 'package:ambulance_app/constants.dart';
 import 'package:ambulance_app/model/RescueRide.dart';
+import 'package:ambulance_app/model/SharedPrefs.dart';
 import 'package:ambulance_app/model/UserValues.dart';
 import 'package:ambulance_app/screens/RideCompleted.dart';
 import 'package:ambulance_app/screens/selection_screen.dart';
@@ -54,8 +55,7 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
                       size: 50.0,
                     ),
                     accountEmail: Text(
-                      Provider.of<UserValues>(context, listen: false)
-                          .getEmail(),
+                      SharedPrefs.prefs.getString("lastUsedEmail"),
                       style: GoogleFonts.mcLaren(fontSize: 17.3),
                     ),
                     decoration: BoxDecoration(color: kMainThemeColor),
@@ -97,8 +97,7 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
                       size: 50.0,
                     ),
                     accountEmail: Text(
-                      Provider.of<UserValues>(context, listen: false)
-                          .getEmail(),
+                      SharedPrefs.prefs.getString("lastUsedEmail"),
                       style: GoogleFonts.mcLaren(fontSize: 17.3),
                     ),
                     decoration: BoxDecoration(color: kMainThemeColor),
@@ -122,28 +121,22 @@ class _DriverMainScreenState extends State<DriverMainScreen> {
                 ],
               ),
             ),
-            body: rides.length != 0
-                ? ListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(20.0),
-                    children: List.generate(rides.length, (index) {
-                      return Center(
-                        child: UserTile(
-                            time:
-                                returnMinuteDifference(rides[index].getTime()),
-                            loc: rides[index].getUserLocation(),
-                            heading: rides[index].getUserName(),
-                            onTap: () {
-                              Navigator.pushNamed(context, RideCompleted.id,
-                                  arguments: rides[index]);
-                            }),
-                      );
-                    }),
-                  )
-                : Text(
-                    "No Active Rides",
-                    style: GoogleFonts.mcLaren(),
-                  ),
+            body: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(20.0),
+              children: List.generate(rides.length, (index) {
+                return Center(
+                  child: UserTile(
+                      time: returnMinuteDifference(rides[index].getTime()),
+                      loc: rides[index].getUserLocation(),
+                      heading: rides[index].getUserName(),
+                      onTap: () {
+                        Navigator.pushNamed(context, RideCompleted.id,
+                            arguments: rides[index]);
+                      }),
+                );
+              }),
+            ),
           );
   }
 }

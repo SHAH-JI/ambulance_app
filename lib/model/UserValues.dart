@@ -15,6 +15,7 @@ class UserValues extends ChangeNotifier {
 
   void updateLocation(Position pos) {
     _position = pos;
+    notifyListeners();
   }
 
   void updateUserEmail(String value) {
